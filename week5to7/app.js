@@ -9,6 +9,8 @@ const skillRouter = require("./routes/skill");
 const usersRouter = require("./routes/users");
 const adminRouter = require("./routes/admin");
 const coachesRouter = require("./routes/coaches");
+const coursesRouter = require("./routes/courses");
+const uploadRouter = require("./routes/upload");
 
 const app = express();
 app.use(cors());
@@ -35,14 +37,26 @@ app.use("/api/credit-package", creditPackageRouter);
 app.use("/api/coaches/skill", skillRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/admin", adminRouter);
-app.use("/api/coaches/", coachesRouter);
+app.use("/api/coaches", coachesRouter);
+app.use("/api/courses", coursesRouter);
+app.use("/api/upload", uploadRouter);
+
+//404
+app.use((req, res, next) => {
+  res.status(404).json({
+    status: "error",
+    message: "無此路由",
+  });
+  return;
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   req.log.error(err);
-  res.status(500).json({
-    status: "error",
-    message: "伺服器錯誤",
+  const statusCode = err.status || 500; // 400, 409, 500 ...
+  res.status(statusCode).json({
+    status: statusCode === 500 ? "error" : "failed",
+    message: err.message || "伺服器錯誤",
   });
 });
 

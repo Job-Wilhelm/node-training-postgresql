@@ -12,22 +12,10 @@ module.exports = new EntitySchema({
     user_id: {
       type: "uuid",
       nullable: false,
-      foreignKey: {
-        name: "course_user_id_fkey",
-        columnNames: ["user_id"],
-        referencedTableName: "USER",
-        referencedColumnNames: ["id"],
-      },
     },
     skill_id: {
       type: "uuid",
       nullable: false,
-      foreignKey: {
-        name: "course_skill_id_fkey",
-        columnNames: ["skill_id"],
-        referencedTableName: "SKILL",
-        referencedColumnNames: ["id"],
-      },
     },
     name: {
       type: "varchar",
@@ -64,6 +52,26 @@ module.exports = new EntitySchema({
       type: "timestamp",
       updateDate: true,
       nullable: false,
+    },
+  },
+  relations: {
+    User: {
+      target: "User",
+      type: "many-to-one",
+      joinColumn: {
+        name: "user_id",
+        referencedColumnNames: "id",
+        foreignKeyConstraintName: "course_user_id_fk",
+      },
+    },
+    Skill: {
+      target: "Skill",
+      type: "many-to-one",
+      joinColumn: {
+        name: "skill_id",
+        referencedColumnNames: "id",
+        foreignKeyConstraintName: "course_skill_id_fk",
+      },
     },
   },
 });

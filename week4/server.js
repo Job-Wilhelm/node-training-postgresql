@@ -136,6 +136,7 @@ const requestListener = async (req, res) => {
       const result = await AppDataSource.getRepository("CreditPackage").delete(
         packageId
       );
+      console.log(result);
       if (result.affected === 0) {
         res.writeHead(400, headers);
         res.write(
@@ -315,5 +316,4 @@ async function startServer() {
   console.log(`伺服器啟動成功, port: ${process.env.PORT}`);
   return server;
 }
-
 module.exports = startServer();
